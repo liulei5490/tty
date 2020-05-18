@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+     PUBLIC "-//mybatis.orc//DTD Mapper 3.0//EN"
+     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+     
+<mapper namespace="com.blog.mapper.IUserInfoMapper">
+   
+   <select id="login" resultType="UserInfo" parameterType="UserInfo">
+   		select userid,username,userpass from userInfo where username=#{username} and userpass=#{userpass}
+   </select>
+   
+   <insert id="add" parameterType="UserInfo">
+   		insert into userinfo values(0,#{username}, password(#{userpass}),#{realname},#{contackway},#{birthday},#{sex},#{work},#{email})
+   </insert>
+   
+   <select id="findAll" resultType="UserInfo" parameterType="int">
+        select * from userInfo where userid=#{userid}
+   </select>
+   
+   <update id="update" parameterType="UserInfo">
+        update userInfo set username=#{username},userpass=password(#{userpass}),realname=#{realname},contackway=#{contackway},birthday=#{birthday},sex=#{sex},work=#{work},email=#{email} where userid=#{userid}
+   </update>
+   
+ 
+</mapper>

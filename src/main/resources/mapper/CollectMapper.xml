@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+     PUBLIC "-//mybatis.orc//DTD Mapper 3.0//EN"
+     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.blog.mapper.ICollectMapper">
+
+	<select id="finds" resultType="map" parameterType="map">
+		select bf.title, bf.label, bf.editordate, bf.pics, cl.userid from bloginfo bf, collect cl where bf.blogid = cl.blogid limit #{page}, #{rows}
+	</select>
+	
+	<select id="findAll" resultType="Collect" parameterType="int">
+		select * from collect where userid = #{_parameter}
+	</select>
+ 
+	<insert id="add" parameterType="Collect">
+		insert into collect values(0,#{collectionuser},#{blogid},#{collectiondate},#{collectionpath})
+	</insert>
+
+	 <select id="findByCid" parameterType="com.blog.bean.Collect" resultType="com.blog.bean.Collect">
+   		select * from collect where userid=#{userid}
+    </select>
+   
+   <select id="findByType" parameterType="map" resultType="Collect">
+   		select * from collect   limit #{page}, #{rows}
+   </select>
+	
+	<select id="getTotalByCid" resultType="Integer">
+ 		select count(bf.title) from  bloginfo bf, collect cl where  bf.blogid = cl.blogid ;
+ 	</select>
+ 	
+	<insert id="addCollect" parameterType="Collect">
+		insert into collect values (0, #{userid}, #{blogid}, now())
+	</insert>
+	
+	<insert id="delCollect" parameterType="Collect">
+		delete from collect where blogid = #{blogid} and userid = #{userid}
+	</insert>
+
+</mapper>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+     PUBLIC "-//mybatis.orc//DTD Mapper 3.0//EN"
+     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+     
+<mapper namespace="com.blog.mapper.IRespondMapper">
+   
+  <select id="selectAll" parameterType="int" resultType="Respond">
+		select * from respond  	where blogid = #{blogid}
+  </select>
+  
+  <insert id="addOne" parameterType="Respond">
+  	insert into respond (respondman , respondedman , type , aboutid , whichbelong , blogid , respondtime , respondcontent) values (#{respondman},#{respondedman},#{type},#{aboutid},#{whichbelong},#{blogid},#{respondtime},#{respondcontent});
+  
+  </insert>
+
+ 
+</mapper>

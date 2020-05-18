@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>松筠-柏寒网页博客</title>
+</head>
+
+<link href="//cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" type="text/css" href="css/common.css"/>
+<link rel="stylesheet" type="text/css" href="css/article.css"/>
+<link rel="stylesheet" href="plugin/jquery.page.css">
+<link href="logo.ico" rel="shortcut icon"/>
+<script src="//cdn.bootcss.com/jquery/3.1.1/jquery.min.js"></script>
+<script src="//cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="plugin/jquery.page.js"></script>
+<script src="js/common.js"></script>
+<script type="text/javascript" src="js/basic.js"></script>
+
+<!--<script src="js/snowy.js"></script>-->
+<style type = "text/css">
+#i{
+width: 180px;
+display: block;
+max-height: 180px;
+overflow: hidden;
+float: right;
+margin-left: 20px;
+border-radius: 5px;
+}
+
+</style>
+
+<script type="text/javascript">
+	
+/* $(function(){
+	$("#page").Page({
+	  totalPages: 7,//分页总数
+	  liNums: 5,//分页的数字按钮数(建议取奇数)
+	  activeClass: 'activP', //active 类样式定义
+	  callBack : function(page){
+			//console.log(page)
+	  }
+  });
+}) */
+var page =1;
+$(function(){
+	flush(page);
+});
+
+function flush(page) {
+	$.post("collect/isLogin",null,function(data){
+		if(data < 0){
+			location.href='login.html';
+		}else{
+			$.post("collect/finds",{page:page}, function(data){
+				var str = '';
+				$.each(data, function(index, item){
+					str += '<div class="panel-body"><div class="row" ><div class="col-xs-6 col-md-3">';
+					str += '<a href="details.html?id='+ item.blogid +'" title="'+ item.title +'"><i id="i"><img src="../'+ item.pics +'" alt="'+ item.title +'"></i></a></div>';
+					str += '<h4 class="media-heading"><a class="title" href="details.html?id='+ item.blogid +'">'+ item.title +'</a></h4>';
+					str += '<p><a class="label label-default">'+item.label+'</a>';
+					str += '<p class="w_list_overview overView">'+item.type+'</p>';
+					str += '<p class="count_r"><span class="count"><i class="glyphicon glyphicon-user"></i>';
+					str += '<a href="#">'+item.username+'</a></span><span class="count"><i class="glyphicon glyphicon-eye-open"></i>阅读:'+item.readnum+'</span><span class="count">';
+					str += '<i class="glyphicon glyphicon-comment"></i>评论量:'+item.evaluate+'</span><span class="count">';
+					str += '<i class="glyphicon glyphicon-time"></i>'+item.editordate+'</span></p></div></div>';
+				});
+				$("#focusboke").html("").append($(str));
+			},"json");
+		}
+	},"json");
+	
+	$.post("collect/total",null, function(data){
+		var str2 = '';
+		var totalpage = Math.ceil(data/1);
+		for (var i=1;i<=totalpage;i++) {
+			str2 += '<a href="javascript:void(0)" onclick="pagenow(this)">'+i+'</a>&nbsp;';
+		}
+		$("#pagelist").html("").append($(str2));
+	});
+}
+
+function pagenow(pagenow) {
+	page = parseInt($(pagenow).text());
+	flush(page);
+}
+</script>
+
+<body>
+	<div class="w_header">
+		<div class="container">
+			<div class="w_header_top">
+<!-- 				<a href="#" class="w_logo"></a>
+ -->				<span class="w_header_nav">
+					<ul id="star">
+						<!-- <li><a href="" class="active">首页</a></li>
+						<li><a href="writen.jsp">Writing</a></li>
+						<li><a href="collect.html">收藏</a></li>
+						<li><a href="attention.html">关注</a></li>
+						<li><a href="myself.html">个人</a></li>
+						<li><a href="comment.html">论坛</a></li> -->
+					</ul>
+				</span>
+				<div class="w_search">
+					<div class="w_searchbox">
+						<input type="text" placeholder="search" />
+						<button>搜索</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="w_container">
+		<div class="container">
+			<div class="row w_main_row">
+				
+				<ol class="breadcrumb w_breadcrumb">
+				  <li><a href="#">首页</a></li>
+				  <li class="active">文章</li>
+				  <span class="w_navbar_tip">自知者不怨人，知命者不怨天，怨人者穷，怨天者无志     --《荀子.荣辱》</span>
+				</ol>
+				
+				<div class="col-lg-9 col-md-9 w_main_left">
+					<div class="panel panel-default">
+					  <div class="panel-body contentList">
+					  	
+					  	<div class="panel panel-default w_article_item" id="focusboke">
+						   <!-- <div class="panel-body">
+						    <div class="row" >
+							   <div class="col-xs-6 col-md-3">
+							    <a href="#" class="thumbnail w_thumbnail">
+							      <img src="img/aticleview.png" alt="...">
+							    </a>
+							  </div>
+							
+							  <h4 class="media-heading">
+							  	<a class="title" href="article_detail.html">Media heading</a>
+							  </h4>
+							  <p><a class="label label-default">Nginx</a><a class="label label-default">tomcat负载均衡</a></p>
+							  <p class="w_list_overview overView">个人博客网站正在建设中。。。。</p>
+							  <p class="count_r"><span class="count"><i class="glyphicon glyphicon-user"></i><a href="#">admin</a></span> <span class="count"><i class="glyphicon glyphicon-eye-open"></i>阅读:1003</span><span class="count"><i class="glyphicon glyphicon-comment"></i>评论:2</span><span class="count"><i class="glyphicon glyphicon-time"></i>2017-01-16</span></p> 
+							
+							</div>
+						  </div> 
+						</div> -->
+					  	
+			
+						
+						</div> 
+						
+						
+						<!--<div class="page">
+							<nav aria-label="Page navigation">
+						  <ul class="pagination">
+						    <li>
+						      <a href="#" aria-label="Previous">
+						        <span aria-hidden="true">&laquo;</span>
+						      </a>
+						    </li>
+						    <li class="active"><a href="#">1</a></li>
+						    <li><a href="#">2</a></li>
+						    <li><a href="#">3</a></li>
+						    <li><a href="#">4</a></li>
+						    <li><a href="#">5</a></li>
+						    <li>
+						      <a href="#" aria-label="Next">
+						        <span aria-hidden="true">&raquo;</span>
+						      </a>
+						    </li>
+						  </ul>
+						</nav>
+						</div>-->
+						<div class="pagelist pagebg" id="pagelist">
+			            </div> 
+						
+						
+					  </div>
+					</div>
+					
+				</div>
+				<div class="col-lg-3 col-md-3 w_main_right">
+					
+					<div class="panel panel-default">
+					  <div class="panel-heading">
+					    <h3 class="panel-title">最新发布</h3>
+					  </div>
+					  <div class="panel-body">
+					    	<ul class="list-unstyled sidebar">				
+								<li><a href="/post/04928311">排序算法之冒泡排序 － java实现</a></li>
+								<li><a href="/post/32097759">快速搭建基于二进制日志文件的 mysql 复制</a></li>							
+								<li><a href="/post/09196557">web 服务器负载均衡教程，快速搭建高可用服务器集群</a></li>							
+								<li><a href="/post/20654391">使用 redis 和 spring-session 实现 tomcat、glassfish 等 web 服务器集群 session 共享</a></li>							
+								<li><a href="/post/41501569">使用 Nginx 实现 tomcat、glassfish 等 web 服务器负载均衡</a></li>							
+								<li><a href="/post/89658700">mysql 复制（replication）基础概念和应用场景简介</a></li>							
+								<li><a href="/post/03088922">redis 单节点在 Linux 生产环境的安装和简单配置</a></li>							
+								<li><a href="/post/05203355">使用 jQuery 的 val() 方法来获取以及设置表单元素值</a></li>							
+								<li><a href="/post/03120718">使用 jQuery 的 removeProp() 方法来删除元素的特性（property）</a></li>							
+								<li><a href="/post/37454977">使用 jQuery 的 prop() 方法来获取以及设置元素的特性（property）</a></li>							
+						</ul>
+					  </div>
+					</div>
+					
+					<div class="panel panel-default">
+					  <div class="panel-heading">
+					    <h3 class="panel-title">友情链接</h3>
+					  </div>
+					  <div class="panel-body">
+					    <div class="newContent">
+					    	<ul class="list-unstyled sidebar shiplink">				
+								<li><a href="https://www.baidu.com/" target="_blank">百度</a></li>
+								<li><a href="https://www.oschina.net/" target="_blank">开源中国</a></li>							
+								<li><a href="http://www.ulewo.com/" target="_blank">有乐网</a></li>							
+								<li><a href="http://www.sina.com.cn/" target="_blank">新浪网</a></li>							
+								<li><a href="http://www.qq.com/" target="_blank">腾讯网</a></li>							
+							</ul>
+					    </div>
+					  </div>
+					</div>
+				</div>
+			
+			
+			</div>
+		</div>
+	</div>
+	<div class="w_foot">
+		<!--<div class="w_foot_copyright">© 2015~2016 版权所有 | <a target="_blank" href="http://www.miitbeian.gov.cn/" rel="nofollow">京ICP备15010892号-1</a></div>-->
+		<div class="w_foot_copyright">Copyright © 2017-2020, www.wfyvv.com. All Rights Reserved. </div>
+	</div>
+	<!--toTop-->
+	<div id="shape">
+		<div class="shapeColor">
+			<div class="shapeFly">
+			</div>
+		</div>
+	</div>
+	<!--snow-->
+	<!--<div class="snow-container"></div>-->
+</body>
+</html>
